@@ -84,19 +84,43 @@ for token := range tokenChan {
 
 ### Model Management
 
-Models can be exported to JSON for backup or portability.
+In addition to creation and training, the library provides comprehensive tools for managing model lifecycle and data integrity.
+
+*   **Retrieval:** Use `GetModelInfos` to list all models or `GetModelInfo` for a specific one.
+*   **Removal:** `RemoveModel` safely deletes a model and all its associated chain data.
+*   **Import/Export:** Models can be exported to JSON and imported back, allowing for easy migration or merging of training data.
+*   **Pruning:**
+    *   `PruneModel`: Removes rare transitions from a specific model based on frequency.
+    *   `VocabularyPrune`: A global cleanup operation that removes rare tokens across all models to reduce database size.
 
 ```go
-file, err := os.Create("model_backup.json")
-if err != nil {
-    log.Fatal(err)
-}
-defer file.Close()
-
+// Export
 err = generator.ExportModel(ctx, model, file)
-if err != nil {
-    log.Fatal(err)
+
+// Import (Merges with existing if name matches)
+err = generator.ImportModel(ctx, jsonReader)
+
+// Global Cleanup
+err = generator.VocabularyPrune(ctx, 5) // Remove tokens seen < 5 times
+```
+
+### Advanced Generation
+
+The generator supports various sampling techniques and seed-based continuation.
+
+*   **Seed-based Generation:** Use `GenerateFromString` or `GenerateFromStream` to continue a chain from existing text.
+*   **Sampling Options:**
+    *   `WithTemperature`: Adjust randomness (lower = more deterministic, higher = more creative).
+    *   `WithTopK`: Restrict selection to the most likely `K` tokens.
+    *   `WithEarlyTermination`: Controls whether generation stops at the `<EOC>` token.
+
+```go
+opts := []markov.GenerateOption{
+    markov.WithMaxLength(50),
+    markov.WithTemperature(0.8),
+    markov.WithTopK(10),
 }
+text, _ := gen.GenerateFromString(ctx, model, "Once upon a time", opts...)
 ```
 
 ## Concurrency Note

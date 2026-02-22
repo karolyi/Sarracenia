@@ -87,8 +87,8 @@ The engine exposes a wide range of custom functions to templates.
 | `markovSentence modelName maxLength`                                             | Generates a thematic sentence from the specified Markov model.                                    |
 | `markovParagraphs modelName count minSentences maxSentences minLength maxLength` | Generates paragraphs of thematic text from the specified Markov model.                            |
 | `randomWord`                                                                     | Returns a single random word from the loaded dictionary.                                          |
-| `randomSentence length`                                                          | Generates a nonsensical sentence of a given length.                                               |
-| `randomParagraphs count minSentences maxSentences minLength maxLength`           | Generates a nonsensical set of paragraphs with lengths in the range of `minLength` to `maxLength` |
+| `randomSentence words`                                                          | Generates a nonsensical sentence with the specified number of words.                              |
+| `randomParagraphs count minSentences maxSentences minWords maxWords`             | Generates a nonsensical set of paragraphs where each sentence contains `minWords` to `maxWords`. |
 | `randomString type length`                                                       | Generates a random string. Types: `username`, `email`, `uuid`, `hex`, `alphanum`.                 |
 | `randomDate layout start end`                                                    | Generates a random, formatted date within a range from three strings.                             |
 | `randomJSON depth elements len`                                                  | Generates a random, nested JSON object string. Capped by `MaxJSONDepth`.                          |
